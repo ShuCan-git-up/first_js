@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        function f() {
+            document.getElementById("获取当前时间").innerHTML=Date();
+            document.write("<h1>这是一个超级标题</h1>")
+        }
+        function f1() {
+            element = document.getElementById('myimage')
+            if (element.src.match("2")) {
+                element.src="images/1.png";
+            } else {
+                element.src="images/2.jpg";
+            }
+        }
+    </script>
+</head>
+<body>
+
+<h1>我的第一个 JavaScript 程序</h1>
+<p id="demo">这是一个段落</p>
+
+<button type="button" onclick="f()">显示日期</button>
+
+<button type="button" onclick="alert('欢迎!')">点我</button>
+
+<img id="myimage" onclick="f1()" src="/images/1.png" width="200" height="360">
+<p>点击这个灯泡就可以切换灯泡哦</p>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<P id="demo">  javascript改变样式</P>
+
+<script src="/js/myScript.js">
+    function f() {
+        x=document.getElementById("demo")
+        x.style.color="#bbf5ff"
+    }
+    function f1() {
+        var x=document.getElementById("demotest".value())
+        if (x=="" || isNaN(x)) {
+            alert("不是数字");
+        }
+        alert("沃日你打野");
+    }
+</script>
+<button type="button" onclick="f()">点我这里</button>
+
+<input id="demotest" type="text">
+<button type="button" onclick="f1()">判断是否是数字</button>
+
+<button type="button" onclick="foo()"></button>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>正则表达式</title>
+</head>
+<body>
+
+<p>替换"microsoft" 为 "runoob":</p>
+<!--<button onclick="f()">点我</button>-->
+<p id="demo">请访问Microsoft!</p>
+<!--参数i:执行对大小写不敏感的匹配-->
+<!--参数g:执行全局匹配(查找所有匹配而非在找到第一个匹配就停止)-->
+<!--参数m:执行多行匹配-->
+    <!--<script>-->
+        // var str="visit runoob!";
+        // var n = str.search(/runoob/i);
+        // console.log(n);
+        // function f() {
+        //     var str = document.getElementById("demo").innerHTML;
+        //     var txt = str.replace(/microsoft/i, "runoob");
+        //     document.getElementById("demo").innerText=txt;
+        // }
+        // var txt="";
+        // try {
+        //     alert("welconme, honey");
+        // } catch (err) {
+        //     txt="本页有一个错误。　\n\n";
+        //     txt+="错误描述:" + err.message + "\n\n";
+        //     txt+="点击确定继续 \n\n"
+        //     alert(txt);
+        // }
+        // debugger
+        <!--var x="1";-->
+        <!--try {-->
+            <!--if (x !== 1) {-->
+               <!--throw "类型不匹配";-->
+            <!--}-->
+        <!--} catch (err) {-->
+            <!--alert(err);-->
+        <!--}-->
+
+        <!--var x=5;-->
+        <!--var y=7;-->
+        <!--console.log(x + " " + y);-->
+    <!--</script>-->
+<!--函数声明和变量声明总是会被解释器悄悄地"提升"到方法的最顶部-->
+<!--只有声明的会提升，初始化的不会-->
+<!--遇到 script 标签的话 js 就进行预解析，将变量 var 和 function 声明提升，但不会执行 function-->
+<script>
+    var x=5;
+    console.log(x + " " + y);
+    var y=7;
+</script>
+<script>
+    var x=5;
+    var y;
+    console.log(x + " " + y);
+    y=7;
+</script>
+</body>
+</html>

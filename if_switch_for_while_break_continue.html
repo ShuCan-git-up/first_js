@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script>
+    if (true) {
+        console.log("shucan");
+    } else {
+        console.log("xulei");
+    }
+    switch (1) {
+        case 1:
+            console.log(1);
+            break;
+        case 2:
+            console.log(2);
+            break;
+        default:
+            console.log(3);
+    }
+
+    var cars=["1", "2", "3", "4", "5"];
+    for (var i = 0 ; i < cars.length ; i++) {
+        document.write(cars[i] + "<br>");
+    }
+
+
+    var person={fname:"shu", lname:"can",age:25};
+    var txt;
+    for (x in person) {
+        txt = txt + person[x];
+    }
+    console.log(txt);
+
+    // do {
+    //     x =1;
+    //     console.log(x);
+    //     i++;
+    // } while (i < 5);
+
+
+    var myArray=[1,2,3];
+    // console.log(myArray.constructor);
+    if (myArray.constructor.toString().indexOf("Array")) {
+        console.log("就是特么的数字")
+    }
+
+    var numb = 3.001
+    console.log(numb.toExponential())
+    console.log(numb.toFixed())
+    console.log(numb.toPrecision());
+
+    console.log(Number("3.14"));
+    console.log(Number(""))
+    console.log(Number("99 88"));
+
+    console.log("5" - 1);
+    console.log("5" + 1);
+</script>
+
+
+<!--javascript里面有五种不同的数据类型  string,number,boolean,object,function-->
+<!--三种对象类型　object,Date,Array-->
+<!--两个不包含任何值的数据类型  null, undefined-->
+
+</body>
+</html>
