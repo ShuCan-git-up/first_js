@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--<script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js">-->
+    <!--</script>-->
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+
+    <!--<script>-->
+        <!--$(document).ready(function(){-->
+            <!--$("button").click(function(){-->
+                <!--$.get("http://116.62.132.24:1010/deviceCenter/api/v1/lgeek/devices?deviceType=gateway",function(data,status){-->
+                    <!--alert("数据: " + data + "\n状态: " + status);-->
+                <!--});-->
+            <!--});-->
+        <!--});-->
+    <!--</script>-->
+
+</head>
+<body>
+<button>点击获取设备掉线信息</button>
+<script>
+    $(document).ready(function(){
+        $("button").click(function () {
+            $.ajax({
+                url: "http://116.62.132.24:1010/deviceCenter/api/v1/lgeek/devices?deviceType=gateway",
+                type: "get",
+                dataType: "json", //指定服务器返回的数据类型
+                timeout:3000,
+                // dataFilter:function(json){
+                //     console.log("jsonp.filter:"+json);
+                //     return json;
+                // },
+                success: function (data) {
+                    alert("数据: " + data + "\n状态: " + status);
+                },
+                error:function(XMLHttpRequest,textStatus,errorThrown){
+                    alert("数据: " + "\n状态: " + status);
+                    console.log("jsonp.error:"+textStatus);
+                }
+            });
+        });
+    });
+</script>
+
+<button id="btn" name="button">按钮</button>
+<script>
+    function validateForm() {
+        var x = document.forms["myForm"]["fName"].value;
+        if (x == null || x == "") {
+            alert("请输入名称");
+            return false;
+        }
+    }
+
+    var submitData=JSON.stringify({
+        "jsonrpc":"2.0",
+        "method":"getRoomDOByRoomId",
+        "params":[
+            2
+        ],
+        "id":0
+    });
+
+    $("#btn").click(function () {
+        $.ajax({
+            type:"post",
+            url:"http://116.62.132.24:7070/smartHotel/hotel.json",
+            dataType:"json",
+            data:submitData,
+            success:function(result){
+                alert(result);
+                console.log(result)
+                // parent.modal("hide");
+                // window.location.reload();
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                alert(XMLHttpRequest.states);
+            }
+        });
+    })
+
+</script>
+</body>
+</html>
