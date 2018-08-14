@@ -3,28 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <!--<script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js">-->
-    <!--</script>-->
-    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
-
-    <!--<script>-->
-        <!--$(document).ready(function(){-->
-            <!--$("button").click(function(){-->
-                <!--$.get("http://116.62.132.24:1010/deviceCenter/api/v1/lgeek/devices?deviceType=gateway",function(data,status){-->
-                    <!--alert("数据: " + data + "\n状态: " + status);-->
-                <!--});-->
-            <!--});-->
-        <!--});-->
-    <!--</script>-->
-
+    <script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js">
+    </script>
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
 </head>
 <body>
-<button>点击获取设备掉线信息</button>
+<button id="getDevicesOffline">点击获取设备掉线信息</button>
 <script>
     $(document).ready(function(){
-        $("button").click(function () {
+        $("#getDevicesOffline").click(function () {
             $.ajax({
                 url: "http://116.62.132.24:1010/deviceCenter/api/v1/lgeek/devices?deviceType=gateway",
+                xhrFields:{withCredentials: true}, // 发送凭据
                 type: "get",
                 dataType: "json", //指定服务器返回的数据类型
                 timeout:3000,
@@ -37,7 +27,7 @@
                 },
                 error:function(XMLHttpRequest,textStatus,errorThrown){
                     alert("数据: " + "\n状态: " + status);
-                    console.log("jsonp.error:"+textStatus);
+                    console.log("jsonp.error:"+ textStatus);
                 }
             });
         });
