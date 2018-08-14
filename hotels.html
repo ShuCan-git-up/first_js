@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bean="http://www.w3.org/1999/XSL/Transform" xmlns:text-align="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src=" https://cdn.bootcss.com/vue/2.2.2/vue.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+    <!--<button id="getHotels">-->
+        <!--获取酒店信息-->
+    <!--</button>-->
+    <!--<button id="getCheck">-->
+        <!--获取复选框选中内容-->
+    <!--</button>-->
+    <button id="getSptUsers">
+        获取配置人员基本信息
+    </button>
+    <div id="sptUsers">
+        <table>
+            <thead>
+            <tr>
+                <th>用户名</th>
+                <th>密码</th>
+                <th>昵称</th>
+                <th>创建时间</th>
+                <th>电话号码</th>
+                <th>邮箱</th>
+                <th>权限修改</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- 每次for循环，都会创建一个tr标签。item是遍历的元素。 -->
+            <tr v-for="item in UserList" >
+                <td>{{ item.userName }}</td>
+                <td>{{ item.password }}</td>
+                <td>{{ item.nickName }}</td>
+                <td>{{ item.createdAt }}</td>
+                <td>{{ item.telNo }}</td>
+                <td>{{ item.email }}</td>
+                <td><button>管理</button></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        $("#getSptUsers").click(function () {
+           $.ajax({
+              url:"http://116.62.132.24:7070/smartHotel/spt-manager-api/v1/spt_users",
+              type:"get",
+              dataType:"json",
+              timeout:3000 ,
+              success:function (data) {
+                  alert(data.msg);
+                  console.log(data.data);
+                  var users = new Object();
+                  users.UserList = data.data;
+                  var app = new Vue({
+                      el: '#sptUsers',
+                      data: users
+                  });
+                  // var str = "";
+                  // str += "<table><thead><tr><td>用户名</td><td>密码</td><td>昵称</td><td>创建时间</td><td>电话号码</td><td>邮箱</td><td>权限修改</td></tr></thead><tbody>";
+                  // data.data.forEach(function (val, index) {
+                  //    console.log(val, index);
+                  //    str +="<tr><td class='userName'>" + val.userName + " </td><td> " + val.password + " </td><td>" + val.nickName + "</td><td>" + val.createdAt + "</td><td> " + val.telNo + " </td><td> " + val.email + " </td><td><button>点击操作</button></td></tr>";
+                  // });
+                  // str +="</tbody></table>";
+                  // $("#sptUsersTable").append(str);
+              },
+              error:function (data) {
+                  alert(data.msg);
+              }
+           });
+        });
+    </script>
+    <script>
+        $("#getCheck").click(function () {
+            var hotels = $(".hotel");
+            // console.log(hotels);
+            hotels.each(function(i){
+                if($(this).prop('checked')){
+                    console.log($(this).attr('hotelId'))
+                }
+            })
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#getHotels").click(function () {
+               $.ajax({
+                    url:"http://116.62.132.24:7070/smartHotel/spt-manager-api/v1/hotels",
+                    type:"get",
+                    dataType:"json",
+                    timeout:"3000",
+                    success: function (data) {
+                        alert("数据: " + data + "\n状态: " + status);
+                        console.log(data);
+                        var hotels = data.data;
+                        // createShowingTable(hotels)
+                        var str = "";
+                        str += "<table><thead><tr><td>酒店id</td><td>酒店名称</td><td>选中</td><td></td></tr></thead><tbody>";
+                        for (var i = 0 ; i < hotels.length ; i++) {
+                            str +="<tr><td class='hotleId'>"+hotels[i].id+"</td><td>"+hotels[i].name+"</td><td><input hotelId='"+hotels[i].id+"' type=\"checkbox\" class=\"hotel\" value=\"1\"/></td></tr>";
+                        }
+                        str +="</tbody></table>";
+                        //将表格添加到body中
+                        $('body').append(str);
+                    },
+                    error:function(XMLHttpRequest, textStatus, errorThrown){
+                       alert(XMLHttpRequest.states);
+                    }
+               });
+            });
+        });
+
+        //动态的创建一个table，同时将后台获取的数据动态的填充到相应的单元格
+        function createShowingTable(data){
+            // var dataArray = $.parseJSON(data.jsonData);
+            //此处需要让其动态的生成一个table并填充数据
+            var tableStr = "<table>";
+            tableStr = tableStr + "<thead><td>酒店id</td><td>酒店名称</td></thead>";
+            var len = data.length;
+            // if(len>=10){
+            //     len = 10;
+            // }
+            for(var i=0 ;i<len ; i++){
+                tableStr = tableStr + "<tr><td>"+ data[i].id +"</td>"+"<td>"+data[i].name + "</td>></tr>";
+            }
+            tableStr = tableStr + "</table>";
+            //将动态生成的table添加的事先隐藏的div中.
+            $("#dataTable").html(tableStr);
+        }
+
+
+        // function checkBoxFn() {
+        //     $('.checkAll').on('click', function() {
+        //         if ($(this).prop('checked')) {
+        //             $('.check_gateway_dev').prop('checked', true)
+        //             $('.check_gateway_dev_attr').removeAttr('disabled').prop('checked', true)
+        //
+        //         } else {
+        //             $('.check_gateway_dev').removeAttr('checked')
+        //             $('.check_gateway_dev_attr').removeAttr('checked').prop('disabled', 'disabled')
+        //         }
+        //     })
+        //
+        //     function allOrNot() {
+        //         let flage = true
+        //         $('.check_gateway_dev').each(function() {
+        //             if (!$(this).prop('checked')) {
+        //                 flage = false
+        //             }
+        //         })
+        //         if (flage) {
+        //             $('.checkAll').prop('checked', true)
+        //         } else {
+        //             $('.checkAll').removeAttr('checked')
+        //         }
+        //     }
+        //
+        //     $(document).on('click', '.check_gateway_dev', function() {
+        //         allOrNot()
+        //         if ($(this).prop('checked')) {
+        //             $(this).parent().parent().find('.check_gateway_dev_attr').removeAttr('disabled').prop('checked', true)
+        //         } else {
+        //             $(this).parent().parent().find('.check_gateway_dev_attr').removeAttr('checked').prop('disabled', 'disabled')
+        //         }
+        //     })
+        // }
+    </script>
+
+    <div text-align=="center" id='sptUsersTable'>
+    </div>
+
+</body>
+</html>
