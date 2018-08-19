@@ -1,22 +1,33 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:bean="http://www.w3.org/1999/XSL/Transform" xmlns:text-align="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:bean="http://www.w3.org/1999/XSL/Transform" xmlns:text-align="http://www.w3.org/1999/xhtml"
+      xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
     <script src=" https://cdn.bootcss.com/vue/2.2.2/vue.min.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
     <title>Title</title>
+    <style type="text/css">
+        .div1{
+            /*width: 1880px;*/
+            text-align: center;
+        }
+        .div2{
+            display:inline-block;
+        }
+        .dialog{
+            width: auto;
+            height: auto;
+            line-height: 30px;
+            text-align: center;
+            color:white;
+            background-color:black;
+        }
+    </style>
 </head>
 <body>
-    <!--<button id="getHotels">-->
-        <!--获取酒店信息-->
-    <!--</button>-->
-    <!--<button id="getCheck">-->
-        <!--获取复选框选中内容-->
-    <!--</button>-->
-    <button id="getSptUsers">
-        获取配置人员基本信息
-    </button>
-    <div id="sptUsers">
+    <div class="div1">
+    <div id="sptUsers" class="div2">
         <table>
             <thead>
             <tr>
@@ -31,68 +42,132 @@
             </thead>
             <tbody>
             <!-- 每次for循环，都会创建一个tr标签。item是遍历的元素。 -->
-            <tr v-for="item in UserList" >
+            <tr v-for="item in UserList">
                 <td>{{ item.userName }}</td>
                 <td>{{ item.password }}</td>
                 <td>{{ item.nickName }}</td>
                 <td>{{ item.createdAt }}</td>
                 <td>{{ item.telNo }}</td>
                 <td>{{ item.email }}</td>
-                <td><button>管理</button></td>
+                <td><button v-on:click="operation_access(item.userName);">点击操作</button></td>
             </tr>
             </tbody>
         </table>
     </div>
-    <script>
-        $("#getSptUsers").click(function () {
-           $.ajax({
-              url:"http://116.62.132.24:7070/smartHotel/spt-manager-api/v1/spt_users",
-              type:"get",
-              dataType:"json",
-              timeout:3000 ,
-              success:function (data) {
-                  alert(data.msg);
-                  console.log(data.data);
-                  var users = new Object();
-                  users.UserList = data.data;
-                  var app = new Vue({
-                      el: '#sptUsers',
-                      data: users
-                  });
-                  // var str = "";
-                  // str += "<table><thead><tr><td>用户名</td><td>密码</td><td>昵称</td><td>创建时间</td><td>电话号码</td><td>邮箱</td><td>权限修改</td></tr></thead><tbody>";
-                  // data.data.forEach(function (val, index) {
-                  //    console.log(val, index);
-                  //    str +="<tr><td class='userName'>" + val.userName + " </td><td> " + val.password + " </td><td>" + val.nickName + "</td><td>" + val.createdAt + "</td><td> " + val.telNo + " </td><td> " + val.email + " </td><td><button>点击操作</button></td></tr>";
-                  // });
-                  // str +="</tbody></table>";
-                  // $("#sptUsersTable").append(str);
-              },
-              error:function (data) {
-                  alert(data.msg);
-              }
-           });
-        });
-    </script>
-    <script>
-        $("#getCheck").click(function () {
-            var hotels = $(".hotel");
-            // console.log(hotels);
-            hotels.each(function(i){
-                if($(this).prop('checked')){
-                    console.log($(this).attr('hotelId'))
-                }
-            })
-        });
-    </script>
+    </div>
+
+    <div class="dialog" id="dialog" title="工程人员酒店分配" style="display: none" style="width:700px; height:225px; overflow:scroll;">
+        <table>
+            <thead>
+            <tr>
+                <th>酒店id</th>
+                <th>酒店名称</th>
+                <th>勾选</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- 每次for循环，都会创建一个tr标签。item是遍历的元素。 -->
+            <tr v-for="item in HotelsList">
+                <td class="hotel_id">{{ item.id }}</td>
+                <td>{{ item.name }}</td>
+                <td><input type="checkbox"/></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!--<script>-->
+        <!--$("#getCheck").click(function () {-->
+            <!--var hotels = $(".hotel");-->
+            <!--// console.log(hotels);-->
+            <!--hotels.each(function(i){-->
+                <!--if($(this).prop('checked')){-->
+                    <!--console.log($(this).attr('hotelId'))-->
+                <!--}-->
+            <!--})-->
+        <!--});-->
+    <!--</script>-->
     <script>
         $(document).ready(function () {
+            $.ajax({
+                url:"http://116.62.132.24:7070/smartHotel/spt-manager-api/v1/spt_users",
+                type:"get",
+                dataType:"json",
+                timeout:3000 ,
+                success:function (data) {
+                    var users = new Object();
+                    users.UserList = data.data;
+                    var app = new Vue({
+                        el: '#sptUsers',
+                        data: users,
+                        methods: {
+                            operation_access: function (message) {
+                                $(function () {
+                                    $("#dialog").dialog({
+                                        // 去掉默认的close按钮
+                                        open: function (event, ui) {
+                                            $(".ui-dialog-titlebar-close", $(this).parent()).hide();
+                                            $.ajax({
+                                                url:"http://116.62.132.24:7070/smartHotel/spt-manager-api/v1/hotels",
+                                                type:"get",
+                                                dataType:"json",
+                                                tzimeout:"3000",
+                                                success:function (data) {
+                                                    var hotels = new Object();
+                                                    hotels.HotelsList = data.data;
+                                                    new Vue({
+                                                        el:"#dialog",
+                                                        data:hotels
+                                                    })
+                                                }
+                                            })
+                                        },
+                                        width : "400", //宽度
+                                        modal: true,
+                                        // 可缩放
+                                        resizable:true,
+                                        buttons:{
+                                            "确认保存":function () {
+                                                var checkboxs = $("input[type='checkbox']:checked")
+                                                var selectedId = new Array();
+                                                checkboxs.each(function (i) {
+                                                    var tr = $(this).parent().parent();
+                                                    var b = tr.children("td");
+                                                    var c = b.eq(0);
+                                                    selectedId.push(c.text());
+                                                })
+
+                                            },
+                                            "取消操作":function () {
+                                                $(this).dialog("close")
+                                            }
+                                        }
+                                    });
+                                });
+                                $(function () {
+                                    
+                                })
+                            }
+                        }
+                    });
+                    // var str = "";
+                    // str += "<table><thead><tr><td>用户名</td><td>密码</td><td>昵称</td><td>创建时间</td><td>电话号码</td><td>邮箱</td><td>权限修改</td></tr></thead><tbody>";
+                    // data.data.forEach(function (val, index) {
+                    //    console.log(val, index);
+                    //    str +="<tr><td class='userName'>" + val.userName + " </td><td> " + val.password + " </td><td>" + val.nickName + "</td><td>" + val.createdAt + "</td><td> " + val.telNo + " </td><td> " + val.email + " </td><td><button>点击操作</button></td></tr>";
+                    // });
+                    // str +="</tbody></table>";
+                    // $("#sptUsersTable").append(str);
+                },
+                error:function (data) {
+                    alert(data.msg);
+                }
+            });
             $("#getHotels").click(function () {
                $.ajax({
                     url:"http://116.62.132.24:7070/smartHotel/spt-manager-api/v1/hotels",
                     type:"get",
                     dataType:"json",
-                    timeout:"3000",
+                    tzimeout:"3000",
                     success: function (data) {
                         alert("数据: " + data + "\n状态: " + status);
                         console.log(data);
@@ -112,25 +187,42 @@
                     }
                });
             });
+            // $("#hide_p").click(function () {
+            //    $("p").hide();
+            // });
+            // $(".test_class").click(function () {
+            //    $(".hide_class_div").hide();
+            // });
+            // var all_element = $("*");
+            // console.log(all_element);
+            // $("p").click(function () {
+            //    console.log("p被点击了");
+            // });
+            // $(".test_class").dblclick(function () {
+            //     console.log("test_class按钮被双击了");
+            // });
+            // $(".hide_class_div").mouseenter(function () {
+            //    console.log("鼠标停在了hide_class_div按钮上");
+            // });
         });
 
         //动态的创建一个table，同时将后台获取的数据动态的填充到相应的单元格
-        function createShowingTable(data){
-            // var dataArray = $.parseJSON(data.jsonData);
-            //此处需要让其动态的生成一个table并填充数据
-            var tableStr = "<table>";
-            tableStr = tableStr + "<thead><td>酒店id</td><td>酒店名称</td></thead>";
-            var len = data.length;
-            // if(len>=10){
-            //     len = 10;
-            // }
-            for(var i=0 ;i<len ; i++){
-                tableStr = tableStr + "<tr><td>"+ data[i].id +"</td>"+"<td>"+data[i].name + "</td>></tr>";
-            }
-            tableStr = tableStr + "</table>";
-            //将动态生成的table添加的事先隐藏的div中.
-            $("#dataTable").html(tableStr);
-        }
+        // function createShowingTable(data){
+        //     // var dataArray = $.parseJSON(data.jsonData);
+        //     //此处需要让其动态的生成一个table并填充数据
+        //     var tableStr = "<table>";
+        //     tableStr = tableStr + "<thead><td>酒店id</td><td>酒店名称</td></thead>";
+        //     var len = data.length;
+        //     // if(len>=10){
+        //     //     len = 10;
+        //     // }
+        //     for(var i=0 ;i<len ; i++){
+        //         tableStr = tableStr + "<tr><td>"+ data[i].id +"</td>"+"<td>"+data[i].name + "</td>></tr>";
+        //     }
+        //     tableStr = tableStr + "</table>";
+        //     //将动态生成的table添加的事先隐藏的div中.
+        //     $("#dataTable").html(tableStr);
+        // }
 
 
         // function checkBoxFn() {
@@ -172,6 +264,16 @@
 
     <div text-align=="center" id='sptUsersTable'>
     </div>
-
+    <!--<button id="hide_p">测试id选择器</button>-->
+    <!--<p>jquery测试</p>-->
+    <!--<p>继续测试</p>-->
+    <!--<button class="test_class">测试class选择器</button>-->
+    <!--<div class="hide_class_div">-->
+        <!--<tr>-->
+            <!--<td>hehe</td>-->
+            <!--<td>hehe</td>-->
+            <!--<td>hehe</td>-->
+        <!--</tr>-->
+    <!--</div>-->
 </body>
 </html>
