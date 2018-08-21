@@ -6,7 +6,8 @@
     <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
     <script src=" https://cdn.bootcss.com/vue/2.2.2/vue.min.js"></script>
     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-    <title>Title</title>
+    <script src="js/sptConfig.js"></script>
+    <title>spt manager</title>
     <style type="text/css">
         .div1{
             /*width: 1880px;*/
@@ -89,7 +90,7 @@
     <script>
         $(document).ready(function () {
             $.ajax({
-                url:"http://116.62.132.24:7070/smartHotel/spt-manager-api/v1/spt_users",
+                url:host_url + "spt_users",
                 type:"get",
                 dataType:"json",
                 timeout:3000 ,
@@ -107,7 +108,7 @@
                                         open: function (event, ui) {
                                             $(".ui-dialog-titlebar-close", $(this).parent()).hide();
                                             $.ajax({
-                                                url:"http://116.62.132.24:7070/smartHotel/spt-manager-api/v1/hotels",
+                                                url:host_url + "hotels",
                                                 type:"get",
                                                 dataType:"json",
                                                 tzimeout:"3000",
@@ -135,7 +136,26 @@
                                                     var c = b.eq(0);
                                                     selectedId.push(c.text());
                                                 })
+                                                $.ajax({
+                                                    url: host_url + "bind_access",
+                                                    type:"post",
+                                                    data:{hotelIds:selectedId, userName: message},
+                                                    traditional: true,
+                                                    dataType:"json",
+                                                    timeout:3000 ,
+                                                    success:function(result){
+                                                        alert(result);
+                                                        console.log(result)
+                                                        // parent.modal("hide");
+                                                        // window.location.reload();
+                                                    },
+                                                    error:function(result){
+                                                        console.log(result)
+                                                    }
+                                                });
 
+                                                console.log(selectedId)
+                                                $(this).dialog("close")
                                             },
                                             "取消操作":function () {
                                                 $(this).dialog("close")
@@ -143,9 +163,6 @@
                                         }
                                     });
                                 });
-                                $(function () {
-                                    
-                                })
                             }
                         }
                     });
@@ -162,31 +179,31 @@
                     alert(data.msg);
                 }
             });
-            $("#getHotels").click(function () {
-               $.ajax({
-                    url:"http://116.62.132.24:7070/smartHotel/spt-manager-api/v1/hotels",
-                    type:"get",
-                    dataType:"json",
-                    tzimeout:"3000",
-                    success: function (data) {
-                        alert("数据: " + data + "\n状态: " + status);
-                        console.log(data);
-                        var hotels = data.data;
-                        // createShowingTable(hotels)
-                        var str = "";
-                        str += "<table><thead><tr><td>酒店id</td><td>酒店名称</td><td>选中</td><td></td></tr></thead><tbody>";
-                        for (var i = 0 ; i < hotels.length ; i++) {
-                            str +="<tr><td class='hotleId'>"+hotels[i].id+"</td><td>"+hotels[i].name+"</td><td><input hotelId='"+hotels[i].id+"' type=\"checkbox\" class=\"hotel\" value=\"1\"/></td></tr>";
-                        }
-                        str +="</tbody></table>";
-                        //将表格添加到body中
-                        $('body').append(str);
-                    },
-                    error:function(XMLHttpRequest, textStatus, errorThrown){
-                       alert(XMLHttpRequest.states);
-                    }
-               });
-            });
+            // $("#getHotels").click(function () {
+            //    $.ajax({
+            //         url:"http://116.62.132.24:7070/smartHotel/spt-manager-api/v1/hotels",
+            //         type:"get",
+            //         dataType:"json",
+            //         tzimeout:"3000",
+            //         success: function (data) {
+            //             alert("数据: " + data + "\n状态: " + status);
+            //             console.log(data);
+            //             var hotels = data.data;
+            //             // createShowingTable(hotels)
+            //             var str = "";
+            //             str += "<table><thead><tr><td>酒店id</td><td>酒店名称</td><td>选中</td><td></td></tr></thead><tbody>";
+            //             for (var i = 0 ; i < hotels.length ; i++) {
+            //                 str +="<tr><td class='hotleId'>"+hotels[i].id+"</td><td>"+hotels[i].name+"</td><td><input hotelId='"+hotels[i].id+"' type=\"checkbox\" class=\"hotel\" value=\"1\"/></td></tr>";
+            //             }
+            //             str +="</tbody></table>";
+            //             //将表格添加到body中
+            //             $('body').append(str);
+            //         },
+            //         error:function(XMLHttpRequest, textStatus, errorThrown){
+            //            alert(XMLHttpRequest.states);
+            //         }
+            //    });
+            // });
             // $("#hide_p").click(function () {
             //    $("p").hide();
             // });
